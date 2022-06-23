@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "160788346664",
+    "project_id": "codal-505f3",
+    "storage_bucket": "codal-505f3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:160788346664:android:61d5f21fc5eb540804021d",
+        "android_client_info": {
+          "package_name": "com.example.codal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "160788346664-l6amhbcu2cd5nq85nldoemi2kgprihqo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6ruxKWWRhV_eyys9dT3QoMr0EWSzw_gM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "160788346664-l6amhbcu2cd5nq85nldoemi2kgprihqo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
