@@ -39,15 +39,9 @@ class userDao {
                 val docRef = emailID?.let { it1 -> db.collection("userMods").document(it1) }
                 docRef?.get()?.addOnSuccessListener { documentSnapshot ->
                     val user = documentSnapshot.toObject<userMod>()
-                    if(user?.likes == null) user?.likes = "0"
-                    it.likes = user?.likes.toString()
                     collect.document(obj.uid).set(it)
                 }
             }
         }
     }
-
-
-
-
 }

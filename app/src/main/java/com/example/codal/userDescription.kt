@@ -18,7 +18,6 @@ class userDescription : AppCompatActivity() {
         binding = ActivityUserDescriptionBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-        val currDao: userDao = userDao()
         binding.currDesignation.text = intent.extras?.get("getDesignation").toString()
         binding.descriptionPara.text = intent.extras?.get("getDescription").toString()
         binding.useremail.text = intent.extras?.get("getEmail").toString()
@@ -26,7 +25,7 @@ class userDescription : AppCompatActivity() {
         val emailid : String = intent.extras?.get("getEmail").toString()
         val nm = intent.extras?.get("getName").toString()
         Log.d("recc", "onCreate: $emailid")
-        val subj: String = "Hey!! Search me by my email ID $emailid on Cod-AL.\n Wanted a team partner for Group contests/hackathons,etc. \n Can we discuss further and share details $nm ?  "
+        val subj: String = "Hey!! Search me by my email ID $emailid on Geeks-Connect.\n Wanted a team partner for Group contests/hackathons,etc. \n Can we discuss further and share details $nm ?  "
         Glide.with(this)
             .load(intent.extras!!.get("getImg")) // the uri you got from Firebase
             .circleCrop()
@@ -34,22 +33,33 @@ class userDescription : AppCompatActivity() {
 
         binding.sendEmail.setOnClickListener {
             val uriText = "mailto:$emailid" +
-                    "?subject=" + "Coders-Alliance" +
+                    "?subject=" + "Geeks-Connect" +
                     "&body=" + subj
             val uri = Uri.parse(uriText)
             val sendIntent = Intent(Intent.ACTION_SENDTO)
             sendIntent.data = uri
             if(sendIntent.resolveActivity(packageManager) != null) {
-                Toast.makeText(this,"Directing",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"Directing..",Toast.LENGTH_SHORT).show()
                 startActivity(Intent.createChooser(sendIntent, "Send Email").addFlags(FLAG_ACTIVITY_NEW_TASK))
             } else {
                 Toast.makeText(this,"Some Error Occurred or Required App not installed!!",Toast.LENGTH_SHORT).show()
             }
 
         }
-//        binding.likeDescription.setOnClickListener {
-//            currDao.updateLikes(emailid)
-//        }
-
+        binding.likeDescription.setOnClickListener {
+            val subj2 = " It was good to connect with you $nm ✍\uD83C\uDFFB. Thanks for taking time out for teaming up with me."
+            val uriText = "mailto:$emailid" +
+                    "?subject=" + "Geeks-Connect" +
+                    "&body=" + subj2
+            val uri = Uri.parse(uriText)
+            val sendIntent = Intent(Intent.ACTION_SENDTO)
+            sendIntent.data = uri
+            if(sendIntent.resolveActivity(packageManager) != null) {
+                Toast.makeText(this,"Directing..",Toast.LENGTH_SHORT).show()
+                startActivity(Intent.createChooser(sendIntent, "Send Email").addFlags(FLAG_ACTIVITY_NEW_TASK))
+            } else {
+                Toast.makeText(this,"Some Error Occurred or Required App not installed!!",Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

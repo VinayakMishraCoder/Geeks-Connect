@@ -35,7 +35,6 @@ class SettingsActivity : AppCompatActivity() {
                 val chef: String = binding.cchefText.text.toString()
                 val force: String = binding.cforcesText.text.toString()
                 val profUrl: String = user?.photoUrl.toString()
-                val likes: String = "0"
                 var numHacks: String = binding.hackText.text.toString()
                 var designation:String
                 val numQues: String = binding.quesText.text.toString()
@@ -43,7 +42,7 @@ class SettingsActivity : AppCompatActivity() {
                 if(binding.checkBox.isChecked) designation = "Open for teaming Up!!"
                 else designation = "Unavailable for Teaming Up"
 
-                userModObj = userMod(emailID, user?.displayName.toString(), profUrl, likes, designation, chef, force, numHacks, desc,numQues)
+                userModObj = userMod(emailID, user?.displayName.toString(), profUrl, designation, chef, force, numHacks, desc,numQues)
                 Log.d("Firelog", userModObj.toString())
                 currDao.insert(userModObj)
             }
@@ -55,14 +54,13 @@ class SettingsActivity : AppCompatActivity() {
                 val profUrl: String = user?.photoUrl.toString()
                 val numQues: String = binding.quesText.text.toString()
                 // TODO : retrieve likes from getObj later on
-                val likes: String = "0"
                 var numHacks: String = binding.hackText.text.toString()
                 var designation:String
 
                 if(binding.checkBox.isChecked) designation = "Open for teaming Up!!"
                 else designation = "Unavailable for Teaming Up"
 
-                userModObj = userMod(emailID, user?.displayName.toString(), profUrl, likes, designation, chef, force, numHacks, desc,numQues)
+                userModObj = userMod(emailID, user?.displayName.toString(), profUrl, designation, chef, force, numHacks, desc,numQues)
                 Log.d("Firelogupset", userModObj.toString())
                 currDao.update(userModObj)
 

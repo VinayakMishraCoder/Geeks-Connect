@@ -10,10 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CodAl">
         <activity
+            android:name=".AboutPage"
+            android:exported="false" />
+        <activity
             android:name=".splashActivity.splashScreenActivity"
             android:exported="true"
-            android:theme="@style/SplashScreenBackground"
-            >
+            android:theme="@style/SplashScreenBackground">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,9 +51,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

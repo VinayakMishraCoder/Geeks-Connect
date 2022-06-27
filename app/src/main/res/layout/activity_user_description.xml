@@ -78,7 +78,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="12dp"
             android:layout_marginRight="15dp"
-            android:elevation="60dp"
+            android:elevation="100dp"
             android:padding="10dp"
             app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -125,14 +125,13 @@
             android:id="@+id/like_description"
             android:layout_width="48dp"
             android:backgroundTint="@color/white"
-
             android:layout_height="35dp"
             android:layout_marginEnd="13dp"
             app:layout_constraintBottom_toBottomOf="@+id/send_email"
             app:layout_constraintEnd_toStartOf="@+id/send_email"
             app:layout_constraintTop_toTopOf="@+id/send_email"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/clapping" />
+            app:srcCompat="@drawable/verify" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

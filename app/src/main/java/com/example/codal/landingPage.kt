@@ -4,16 +4,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.codal.Daos.userDao
 import com.example.codal.databinding.ActivityLandingPageBinding
@@ -38,6 +37,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.security.AccessController.getContext
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import java.util.*
 
 class landingPage : AppCompatActivity() ,adapterOnClick {
 
@@ -45,8 +49,9 @@ class landingPage : AppCompatActivity() ,adapterOnClick {
     lateinit var toggle : ActionBarDrawerToggle
     lateinit var currDao: userDao
     var objList: MutableList<userMod> = emptyList<userMod>().toMutableList()
-
-
+    var objListTemp: MutableList<userMod> = emptyList<userMod>().toMutableList()
+    lateinit var recGlobal: RecyclerView
+    lateinit var recView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLandingPageBinding.inflate(layoutInflater)
@@ -58,7 +63,7 @@ class landingPage : AppCompatActivity() ,adapterOnClick {
         toggle.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        currDao = userDao()
+
         // SETUP NAVIGATION HEADER VALUES
         val head: View = binding.navView.getHeaderView(0) /* Inflate Header from navView */
 
@@ -99,6 +104,10 @@ class landingPage : AppCompatActivity() ,adapterOnClick {
                     val sortingListsIntent = Intent(this, PlatformQuestions::class.java)
                     startActivity(sortingListsIntent)
                 }
+                R.id.aboutapp -> {
+                    val sortingListsIntent = Intent(this, AboutPage::class.java)
+                    startActivity(sortingListsIntent)
+                }
                 R.id.logout_menu -> {
 // Prompt the user to re-provide their sign-in credentials
                     val user = Firebase.auth.currentUser!!
@@ -118,7 +127,40 @@ class landingPage : AppCompatActivity() ,adapterOnClick {
 
 
         // FIREBASE RECYCLERVIEW
-        val query = currDao.collect.orderBy("likes", Query.Direction.DESCENDING)
+        refreshState()
+
+        // REFRESH SETUP
+        val swipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+
+        // Refresh function for the layout
+        swipeRefreshLayout.setOnRefreshListener{
+
+            // Your code goes here
+            // In this code, we are just changing the text in the
+            // textbox
+            refreshState()
+
+            // This line is important as it explicitly refreshes only once
+            // If "true" it implicitly refreshes forever
+            swipeRefreshLayout.isRefreshing = false
+        }
+    }
+
+    override fun onMoved(usm: userMod) {
+        val userPageIntent = Intent(this, userDescription::class.java)
+        userPageIntent.putExtra("getDesignation", usm.designation)
+        userPageIntent.putExtra("getDescription", usm.udescription)
+        userPageIntent.putExtra("getEmail", usm.uid)
+        userPageIntent.putExtra("getName", usm.name)
+        userPageIntent.putExtra("getImg", usm.imgUrl)
+        startActivity(userPageIntent)
+    }
+
+    fun refreshState() {
+        objListTemp.clear()
+        objList.clear()
+        currDao = userDao()
+        val query = currDao.collect.orderBy("name", Query.Direction.DESCENDING)
         query
             .get()
             .addOnSuccessListener { result ->
@@ -126,56 +168,61 @@ class landingPage : AppCompatActivity() ,adapterOnClick {
                     var temp: userMod = document.toObject<userMod>()
                     if (temp != null) {
                         objList.add(temp)
+//                        Log.d("trp", temp.uid)
                     }
                 }
-                val recView = binding.customRv
+                objListTemp.addAll(objList)
+                recView = binding.customRv
                 recView.layoutManager = LinearLayoutManager(this)
-                val adpt = customAdapter(objList,this)
+                val adpt = customAdapter(objListTemp,this)
                 recView.adapter = adpt
-                Log.d("objlist ", objList.toString())
-
+//                Log.d("trp", objList.toString())
+//                Log.d("trp", objListTemp.toString())
             }
             .addOnFailureListener { exception ->
-//                Log.d("errorMsg", "Error getting documents: ", exception)
                 Toast.makeText(this,"Some Error Occurred!!", Toast.LENGTH_SHORT)
             }
-
     }
-
-
-//    override fun onStart() {
-//        super.onStart()
-//        adapt.startListening()
-//    }
-//
-//    override fun onStop() {
-//        super.onStop()
-//        adapt.stopListening()
-//    }
-    // NAVIGATION DRAWER SETUP
+    //NAVIGATION DRAWER SETUP
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(toggle.onOptionsItemSelected(item)) return true;
         return super.onOptionsItemSelected(item)
     }
 
-//    override fun onLikeClicked(usm: userMod) {
-//        val userPageIntent = Intent(this, userDescription::class.java)
-//        userPageIntent.putExtra("getDesignation",usm.designation)
-//        userPageIntent.putExtra("getDescription",usm.udescription)
-//        userPageIntent.putExtra("getEmail",usm.uid)
-//        userPageIntent.putExtra("getName",usm.name)
-//        userPageIntent.putExtra("getImg",usm.imgUrl)
-////        userPageIntent.putExtra("getdata",usm.designation)
-//        startActivity(userPageIntent)
-//    }
 
-    override fun onMoved(usm: userMod) {
-        val userPageIntent = Intent(this, userDescription::class.java)
-        userPageIntent.putExtra("getDesignation",usm.designation)
-        userPageIntent.putExtra("getDescription",usm.udescription)
-        userPageIntent.putExtra("getEmail",usm.uid)
-        userPageIntent.putExtra("getName",usm.name)
-        userPageIntent.putExtra("getImg",usm.imgUrl)
-        startActivity(userPageIntent)
+
+    // SEARCH ACTIVITY
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        menuInflater.inflate((R.menu.search_act),menu)
+        val itm = menu?.findItem(R.id.search_action)
+        val searchView = itm?.actionView as androidx.appcompat.widget.SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                objListTemp.clear()
+                val searchText = p0?.lowercase(Locale.getDefault())
+                if(searchText!!.isNotEmpty()) {
+                    objList.forEach {
+                        if(it.uid.lowercase(Locale.getDefault()).contains(searchText)) {
+                            objListTemp.add(it)
+                        }
+                    }
+                    recView.adapter!!.notifyDataSetChanged()
+                }
+                else {
+                    objListTemp.clear()
+                    objListTemp.addAll(objList)
+                    recView.adapter!!.notifyDataSetChanged()
+                }
+                return false
+            }
+
+        })
+        return super.onCreateOptionsMenu(menu)
     }
+
 }
