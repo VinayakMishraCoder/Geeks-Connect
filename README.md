@@ -1,5 +1,5 @@
 # Geeks-Connect
-## Connect with people forteam-ups for Hackathons/Contests on basis of their
+Connect with people forteam-ups for Hackathons/Contests on basis of their
 ratings on Competitive Coding sites/ Number of submissions on various Platforms/
 Number of Hackathons given.
 # Demo run for app.
