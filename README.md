@@ -4,8 +4,10 @@ ratings on Competitive Coding sites/ Number of submissions on various Platforms/
 Number of Hackathons given.
 
 • Used Firebase authentication for Google sign-in/sign-out.
+
 • Integrated Cloud-Firestore for storing/sorting user-ids on various fields/CP
 profiles/ratings provided by users.
+
 • Added Search Activity, RecyclerView and intents.
 
 # Demo run for app.
