@@ -1,4 +1,4 @@
-# Geeks-Connect
+# Geeks-Connect (Kotlin + Firebase Cloud FireStore)
 Connect with people for team-ups for Hackathons/Contests on basis of their
 ratings on Competitive Coding sites/ Number of submissions on various Platforms/
 Number of Hackathons given.
